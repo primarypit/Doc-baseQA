@@ -3,9 +3,10 @@ from langchain.text_splitter import CharacterTextSplitter,RecursiveCharacterText
 
 class Document():
 
-    def __init__(self, file_dir):
-        self.file_dir = file_dir
-        self.type = file_dir.split(".")[-1]
+    def __init__(self, folder_dir, file_name):
+        self.file_dir = folder_dir + file_name
+        self.doc_name = file_name.split(".")[0]
+        self.type = file_name.split(".")[-1]
         self.docs = self.load_text(self.file_dir)
     
     def load_text(self,file_dir):
@@ -40,3 +41,6 @@ class Document():
         chunks = text_splitter.split_documents(self.docs)
         chunks = [chunk.page_content for chunk in chunks]
         return chunks
+
+    def get_name(self):
+        return self.doc_name

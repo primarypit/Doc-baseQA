@@ -5,8 +5,8 @@ class LLMapi():
     def __init__(self):
 
         self.client = OpenAI(
-            api_key="api-key",
-            base_url="*************"
+            api_key="*********",
+            base_url="https://api.chatanywhere.tech/v1"
         )
         self.model = "gpt-3.5-turbo"
         self.fiexed_prompt = ('Please Answer the above question given the following text.')
