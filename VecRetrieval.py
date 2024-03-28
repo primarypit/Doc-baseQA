@@ -19,7 +19,12 @@ class VecStore():
     def build_retriever(self, doc: Document, saveflag):
         doc_chunks = doc.text_split()
         print("Building retriever...")
-        db = FAISS.from_texts(doc_chunks, self.eb)
+        metadata = []
+        for i in range(len(doc_chunks)):
+            tmp = {}
+            tmp["order"] = i
+            metadata.append(tmp)
+        db = FAISS.from_texts(doc_chunks, self.eb, metadata)
         if saveflag:
             db.save_local("FAISS_store", doc.get_name())
         #db = FAISS(self.eb, index=IndexFlatL2(1536), docstore=InMemoryDocstore(), index_to_docstore_id={})

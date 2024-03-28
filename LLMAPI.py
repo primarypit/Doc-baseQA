@@ -5,7 +5,7 @@ class LLMapi():
     def __init__(self):
 
         self.client = OpenAI(
-            api_key="*********",
+            api_key="***",
             base_url="https://api.chatanywhere.tech/v1"
         )
         self.model = "gpt-3.5-turbo"
