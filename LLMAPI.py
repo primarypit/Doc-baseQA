@@ -1,28 +1,25 @@
 import time
-from openai import OpenAI
+from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
 
 class LLMapi():
-    def __init__(self):
+    def __init__(self, llm):
+        self.llm = llm
+        self.fiexed_prompt = ('Please Answer the above question given the following infomation of the text.')
 
-        self.client = OpenAI(
-            api_key="***",
-            base_url="https://api.chatanywhere.tech/v1"
-        )
-        self.model = "gpt-3.5-turbo"
-        self.fiexed_prompt = ('Please Answer the above question given the following text.')
+    def get_response(self, query, summary, text):
+        template = """Question: {query}
+                    Summary of the given text/data: {summary}
+                    Related text of the given text/data: {text}
+                    Answer: """
 
-    def get_response(self, query, text):
-        prompt = "\n".join([query, self.fiexed_prompt, text])
+        prompt = PromptTemplate(template=template, input_variables=["query", "summary", "text"])
+
         while True:
             try:
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": "You are a helpful assistant."},
-                        {"role": "user", "content": prompt}
-                    ]
-                )
-                return response.choices[0].message.content
-            except:
+                llm_chain = LLMChain(prompt = prompt, llm = self.llm)
+                ans = llm_chain.run(query = query, summary = summary, text = text)
+                return ans
+            except Exception as e:
                 time.sleep(2)
                 continue

@@ -2,6 +2,7 @@ from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain_community.vectorstores.faiss import FAISS
 from faiss import IndexFlatL2
+from langchain.chains.summarize import load_summarize_chain
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from DataPreprocess import Document
 from tqdm import tqdm
@@ -17,14 +18,17 @@ class VecStore():
         self.retriever = None
 
     def build_retriever(self, doc: Document, saveflag):
+        
         doc_chunks = doc.text_split()
+
         print("Building retriever...")
         metadata = []
         for i in range(len(doc_chunks)):
             tmp = {}
             tmp["order"] = i
             metadata.append(tmp)
-        db = FAISS.from_texts(doc_chunks, self.eb, metadata)
+        doc_chunks_text = [chunk.page_content for chunk in doc_chunks]
+        db = FAISS.from_texts(doc_chunks_text, self.eb, metadata)
         if saveflag:
             db.save_local("FAISS_store", doc.get_name())
         #db = FAISS(self.eb, index=IndexFlatL2(1536), docstore=InMemoryDocstore(), index_to_docstore_id={})
