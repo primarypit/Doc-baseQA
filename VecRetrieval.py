@@ -17,7 +17,7 @@ class VecStore():
         self.search_kwargs = search_kwargs
         self.retriever = None
 
-    def build_retriever(self, doc: Document, saveflag):
+    def build_retriever(self, doc, saveflag):
         
         doc_chunks = doc.text_split()
 
