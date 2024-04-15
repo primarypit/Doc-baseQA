@@ -6,7 +6,7 @@ import warnings
 import re
 warnings.filterwarnings('ignore')
 
-open_key="***"
+open_key="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"
 llmai = OpenAI(temperature=0, openai_api_key=open_key)
 
 saving_dir = "FAISS_store/"
